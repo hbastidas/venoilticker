@@ -1,2 +1,2 @@
 # venoilticker
-a simple script for scraping Venezuelan
+a simple script for webscraping Venezuelan oil price
