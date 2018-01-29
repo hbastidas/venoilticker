@@ -4,51 +4,70 @@ const axios = require('axios');
 
 // Define Class
 function Mpetromin() {
-  this.content=undefined;
-   this.dates=undefined;
-   this.db=[]
-   self=this;
-   setInterval(function(){
-     self.run();
-     if (self.content!=undefined) {
-      self.extractor(self.content)
-     }
-   }, 5000)
+  this.dates = undefined;
+  this.db = [];
+
+  this.run();
 }
 
-//algoritm for order data
-Mpetromin.prototype.extractor = function (data){
-  var tempindex="";
-  this.db=[];
+Mpetromin.prototype.extractor = function(data) {
+  var tempindex = "";
 
   for (var dt in data) {
-    if (dt==0) {
-        this.dates=data[dt]
-    }else{
+    if (dt == 0) {
+      this.dates = data[dt]
+    } else {
       for (var dateindex in this.dates) {
-        if(data[dt][dateindex]!=""){
-            if (this.dates[dateindex]=="") {
-              tempindex+=data[dt][dateindex]+" ";
-            }else {
-              this.db.push({date: this.dates[dateindex], index: tempindex.trim(), value: data[dt][dateindex]})
-            }
+        if (data[dt][dateindex] != "") {
+          if (this.dates[dateindex] == "") {
+            tempindex += data[dt][dateindex] + " ";
+          } else {
+            this.db.push({
+              date: this.dates[dateindex],
+              index: tempindex.trim(),
+              value: data[dt][dateindex]
+            })
+          }
         }
       }
-      tempindex="";
+      tempindex = "";
     }
   }
-  console.log(this.db);
+  //secund order
+  var tempdb = [];
+  tempindex = "";
+  for (var i = 0; i < this.db.length; i++) {
+    if (typeof tempdb[this.db[i].index] == 'undefined') {
+      tempdb[this.db[i].index] = [];
+    } else {
+      if (typeof tempdb[this.db[i].index][this.db[i].date] == 'undefined') {
+        tempdb[this.db[i].index][this.db[i].date] = this.db[i].value;
+      }
+    }
+  }
+  this.db = tempdb;
 }
 
-Mpetromin.prototype.run = async function () {
+Mpetromin.prototype.run = function() {
+    this.scraping();
+};
+
+Mpetromin.prototype.deamon = function() {
+  self = this;
+  setInterval(function() {
+    self.run();
+  }, 10000)
+};
+
+Mpetromin.prototype.scraping = async function(callback) {
   const mpetrominres = axios('http://www.mpetromin.gob.ve/portalmenpet/secciones.php?option=view&idS=45');
   const [response] = await Promise.all([mpetrominres]);
   let $ = cheerio.load(response.data);
   cheerioTableparser($);
-  this.content=$('#contenido table').parsetable(true, true, true)
+  this.extractor($('#contenido table').parsetable(true, true, true));
 };
 
-Mpetromin.prototype.getdata = function(){
+Mpetromin.prototype.getdata = function() {
   return this.db;
 }
 
