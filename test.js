@@ -11,7 +11,6 @@ let running=setInterval(function(){
   })
 
   let data = venoilticker.source['mpetromin'].getdata();
-
   if (Object.keys(data).length!=0) {
     console.log(data);
   }else {
