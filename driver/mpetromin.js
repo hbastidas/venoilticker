@@ -9,43 +9,16 @@ function Mpetromin() {
 }
 
 Mpetromin.prototype.extractor = function(data) {
-
-  console.log(data);
-  var tempindex = "";
-
-  for (var dt in data) {
-    if (dt == 0) {
-      this.dates = data[dt]
-    } else {
-      for (var dateindex in this.dates) {
-        if (data[dt][dateindex] != "") {
-          if (this.dates[dateindex] == "") {
-            tempindex += data[dt][dateindex] + " ";
-          } else {
-            this.db.push({
-              date: this.dates[dateindex],
-              index: tempindex.trim(),
-              value: data[dt][dateindex]
-            })
-          }
-        }
-      }
-      tempindex = "";
+  let datacolumn=new Array
+  data.forEach(element =>{
+    if(element[0]!="" && element[(element.length)-1]!=""){
+      datacolumn.push({
+        key: element[0],
+        value: element[(element.length)-1]
+      })
     }
-  }
-  //secund order
-  var tempdb = [];
-  tempindex = "";
-  for (var i = 0; i < this.db.length; i++) {
-    if (typeof tempdb[this.db[i].index] == 'undefined') {
-      tempdb[this.db[i].index] = [];
-    } else {
-      if (typeof tempdb[this.db[i].index][this.db[i].date] == 'undefined') {
-        tempdb[this.db[i].index][this.db[i].date] = this.db[i].value;
-      }
-    }
-  }
-  this.db = tempdb;
+  });
+  this.db = datacolumn;
 }
 
 Mpetromin.prototype.run = async function() {
