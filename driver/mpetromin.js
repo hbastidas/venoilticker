@@ -18,11 +18,12 @@ Mpetromin.prototype.extractor = function(data) {
       })
     }
   });
-  this.db = datacolumn;
+  return datacolumn;
 }
 
 Mpetromin.prototype.run = async function() {
-    this.extractor(await this.scraping.get().catch(error =>{ throw error;}));
+    this.db = this.extractor(await this.scraping.get().catch(error =>{ throw error;}));
+    return this.db;
 };
 
 Mpetromin.prototype.getdata = function() {
