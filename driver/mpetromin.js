@@ -22,7 +22,7 @@ Mpetromin.prototype.extractor = function(data) {
 }
 
 Mpetromin.prototype.run = async function() {
-    this.db = this.extractor(await this.scraping.get().catch(error =>{ throw error;}));
+    this.db = this.extractor(await this.scraping.get(true,true,true).catch(error =>{ throw error;}));
     return this.db;
 };
 
