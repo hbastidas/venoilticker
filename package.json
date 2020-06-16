@@ -1,6 +1,6 @@
 {
   "name": "venoilticker",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A simple script for webscraping Venezuelan oil price",
   "main": "index.js",
   "scripts": {
