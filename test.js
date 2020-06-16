@@ -4,7 +4,7 @@ let Venoilticker = require('./index');
 let venoilticker = new Venoilticker();
 
 //running webscraping
-  venoilticker.source['mpetromin'].run().catch(error=>{
+  venoilticker.source['inecn'].run().catch(error=>{
     console.log(error)
   }).then(data=>{
       console.log(data);
